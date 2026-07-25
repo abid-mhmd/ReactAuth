@@ -1,11 +1,13 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
+//User Auth
+
 export const authMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startWith("Bearer")) {
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         succes: false,
         message: "Unauthorized",
@@ -13,8 +15,9 @@ export const authMiddleware = async (req, res, next) => {
     }
 
     const token = authHeader.split(" ")[1];
-    const decorded = jwt.verify(authHeader, process.env.JWT_SECRET);
-    const user = await User.findById(decorded.user._id).select("-password");
+    const decorded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decorded)
+    const user = await User.findById(decorded.id).select("-password");
 
     if (!user) {
       return res.status(401).json({
@@ -25,12 +28,15 @@ export const authMiddleware = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
+    console.log(error)
     return res.status(401).json({
       succes: false,
       message: "Invalid Token",
     });
   }
 };
+
+//Admin Auth
 
 export const adminMiddleware = async (req, res, next) => {
   if (req.user.role !== "admin") {

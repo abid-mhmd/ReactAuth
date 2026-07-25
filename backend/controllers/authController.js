@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
 
+//Register
+
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -43,6 +45,8 @@ export const register = async (req, res) => {
     });
   }
 };
+
+//Login
 
 export const loginUser = async (req, res) => {
   try {
