@@ -16,7 +16,6 @@ export const authMiddleware = async (req, res, next) => {
 
     const token = authHeader.split(" ")[1];
     const decorded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decorded)
     const user = await User.findById(decorded.id).select("-password");
 
     if (!user) {
