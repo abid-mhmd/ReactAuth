@@ -49,6 +49,9 @@ export const adminLogin = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
+    const users = await User.find().select("-password");
+
+    res.status(200).json({ succes: true, users });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

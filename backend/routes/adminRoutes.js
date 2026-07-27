@@ -4,7 +4,7 @@ import { adminMiddleware } from "../middleware/authMiddleware.js";
 import {
   adminLogin,
   getUsers,
-  searchUsers,
+  // searchUsers,
   addUser,
   updateUser,
   deleteUser,
@@ -14,7 +14,7 @@ const router=express.Router();
 
 router.post("/login",adminLogin);
 router.get("/users",authMiddleware,adminMiddleware,getUsers);
-router.get("/users/search",authMiddleware,adminMiddleware,searchUsers);
+// router.get("/users/search",authMiddleware,adminMiddleware,searchUsers);
 router.post("/users",authMiddleware,adminMiddleware,addUser)
 router.put("/users/:id",authMiddleware,adminMiddleware,updateUser);
 router.delete("/users/:id",authMiddleware,adminMiddleware,deleteUser);
