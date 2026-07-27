@@ -107,13 +107,11 @@ export const addUser = async (req, res) => {
     const userResponce = user.toObject();
     delete userResponce.password;
 
-    res
-      .status(201)
-      .json({
-        succes: true,
-        message: "User added successfully",
-        user: userResponce,
-      });
+    res.status(201).json({
+      succes: true,
+      message: "User added successfully",
+      user: userResponce,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -121,6 +119,39 @@ export const addUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
+    const { id } = req.params;
+    const { name, email } = req.body;
+
+    if (!name || !email) {
+      return res
+        .status(400)
+        .json({ succes: false, message: "Name and Email are required" });
+    }
+
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ succes: false, message: "User not found" });
+    }
+    const exists = await User.findOne({ email, _idid: { $ne: id } });
+
+    if (exists) {
+      return res
+        .status(400)
+        .json({ succes: false, message: "Email already exists" });
+    }
+
+    user.name = name;
+    user.email = email;
+
+    await user.save();
+
+    const userResponce = user.toObject();
+    delete userResponce.password;
+
+    res
+      .status(200)
+      .json({ succes: true, message: "User updated successfully" });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
