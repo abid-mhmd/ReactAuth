@@ -76,6 +76,44 @@ export const searchUsers = async (req, res) => {
 
 export const addUser = async (req, res) => {
   try {
+    const { name, email, password } = req.body;
+
+    //validation
+
+    if (!name || !email || !password) {
+      return res
+        .status(400)
+        .json({ succes: false, message: "All fields are required" });
+    }
+
+    //exists check
+
+    const exists = await User.findOne({ email });
+
+    if (exists) {
+      return res
+        .status(400)
+        .json({ succuss: false, message: "Email already exists" });
+    }
+
+    const hashPassoword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashPassoword,
+    });
+
+    const userResponce = user.toObject();
+    delete userResponce.password;
+
+    res
+      .status(201)
+      .json({
+        succes: true,
+        message: "User added successfully",
+        user: userResponce,
+      });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
