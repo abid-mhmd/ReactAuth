@@ -59,6 +59,16 @@ export const getUsers = async (req, res) => {
 
 export const searchUsers = async (req, res) => {
   try {
+    const { search } = req.query;
+
+    const users = await User.find({
+      $or: [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+      ],
+    }).select("-password");
+
+    res.status(200).json({ succes: true, message: users });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
