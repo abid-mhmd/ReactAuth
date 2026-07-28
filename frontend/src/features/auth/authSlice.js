@@ -1,5 +1,4 @@
-import js from "@eslint/js";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { registerUser, loginUser } from "../../services/authService";
 
 const initialState = {
@@ -8,24 +7,11 @@ const initialState = {
   isAuthenticated: !!localStorage.getItem("token"),
 };
 
-export const register = createAsyncThunk(
-  "auth/register",
-  async (userData, thunkApi) => {
-    try {
-      return await registerUser(userData);
-    } catch (error) {
-      return thunkApi.rejectWithValue(
-        error.responce?.data?.message || "Registration failed",
-      );
-    }
-  },
-);
-
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    loginSuccess: (state, action) => {
+    setCredentials: (state, action) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
@@ -43,23 +29,8 @@ const authSlice = createSlice({
       localStorage.removeItem("user");
     },
   },
-
-  extraReducers: (builder) => {
-    builder
-      .addCase(register.pending, (state) => {
-        state.loading = true;
-        state.error = true;
-      })
-      .addCase(register.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(register.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
-  },
 });
 
-export const { loginSuccess, logout } = authSlice.actions;
+export const { setCredentials, logout } = authSlice.actions;
 
 export default authSlice.reducer;

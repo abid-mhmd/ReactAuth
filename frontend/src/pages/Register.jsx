@@ -1,26 +1,41 @@
-import { useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelecter } from "react-redux";
-import { register as registerUser } from "../features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
-const Register = () => {
+import { registerUser } from "../services/authService";
+import { setCredentials } from "../features/auth/authSlice";
+
+function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { loading, error } = useSelecter((state) => state.auth);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const onSubmit = async (data) => {
-    const result = await dispatch(registerUser(data));
+    try {
+      setLoading(true);
+      setError("");
 
-    if (registerUser.fullfilled.match(result)) {
-      navigate("/");
+      const response = await registerUser(data);
+
+      dispatch(setCredentials(response));
+
+      reset();
+
+      navigate("/profile");
+    } catch (error) {
+      setError(error.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,7 +77,7 @@ const Register = () => {
           <p className="mb-3 text-sm text-red-500">{errors.email.message}</p>
         )}
 
-        {/* Password  */}
+        {/* Password */}
 
         <input
           type="password"
@@ -81,18 +96,27 @@ const Register = () => {
           <p className="mb-3 text-sm text-red-500">{errors.password.message}</p>
         )}
 
+        {/* Backend Error */}
+
         {error && <p className="mb-4 text-center text-red-500">{error}</p>}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded bg-blue-600 p-3 text-white hover:bg-blue-700 disabled:bg-gray-400"
+          className="w-full rounded bg-blue-600 p-3 text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
         >
           {loading ? "Registering..." : "Register"}
         </button>
+
+        <p className="mt-4 text-center">
+          Already have an account?{" "}
+          <Link to="/" className="font-medium text-blue-600 hover:underline">
+            Login
+          </Link>
+        </p>
       </form>
     </div>
   );
-};
+}
 
 export default Register;
