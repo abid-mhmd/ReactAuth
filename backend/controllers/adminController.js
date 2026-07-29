@@ -37,7 +37,7 @@ export const adminLogin = async (req, res) => {
     delete adminResponce.password;
 
     res.status(200).json({
-      succes: true,
+      success: true,
       message: "Admin Login Successful",
       token,
       admin: adminResponce,
@@ -51,7 +51,7 @@ export const getUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password");
 
-    res.status(200).json({ succes: true, users });
+    res.status(200).json({ success: true, users });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -68,7 +68,7 @@ export const searchUsers = async (req, res) => {
       ],
     }).select("-password");
 
-    res.status(200).json({ succes: true, message: users });
+    res.status(200).json({ success: true, message: users });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -83,7 +83,7 @@ export const addUser = async (req, res) => {
     if (!name || !email || !password) {
       return res
         .status(400)
-        .json({ succes: false, message: "All fields are required" });
+        .json({ success: false, message: "All fields are required" });
     }
 
     //exists check
@@ -108,7 +108,7 @@ export const addUser = async (req, res) => {
     delete userResponce.password;
 
     res.status(201).json({
-      succes: true,
+      success: true,
       message: "User added successfully",
       user: userResponce,
     });
@@ -125,20 +125,22 @@ export const updateUser = async (req, res) => {
     if (!name || !email) {
       return res
         .status(400)
-        .json({ succes: false, message: "Name and Email are required" });
+        .json({ success: false, message: "Name and Email are required" });
     }
 
     const user = await User.findById(id);
 
     if (!user) {
-      return res.status(404).json({ succes: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
-    const exists = await User.findOne({ email, _idid: { $ne: id } });
+    const exists = await User.findOne({ email, _id: { $ne: id } });
 
     if (exists) {
       return res
         .status(400)
-        .json({ succes: false, message: "Email already exists" });
+        .json({ success: false, message: "Email already exists" });
     }
 
     user.name = name;
@@ -149,9 +151,11 @@ export const updateUser = async (req, res) => {
     const userResponce = user.toObject();
     delete userResponce.password;
 
-    res
-      .status(200)
-      .json({ succes: true, message: "User updated successfully" });
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      user: userResponce,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -164,14 +168,18 @@ export const deleteUser = async (req, res) => {
     const user = await User.findById(id);
 
     if (!user) {
-      return res.status(400).json({ succes: false, message: "User not found" });
+      return res
+        .status(400)
+        .json({ success: false, message: "User not found" });
     }
 
     //Delete User
 
     await User.findByIdAndDelete(id);
 
-    res.status(200).json({ succes: true, message: "User delete Successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "User delete Successfully" });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

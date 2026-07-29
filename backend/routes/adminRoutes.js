@@ -13,10 +13,10 @@ import {
 const router=express.Router();
 
 router.post("/login",adminLogin);
-router.get("/users",authMiddleware,adminMiddleware,getUsers);
-router.get("/users/search",authMiddleware,adminMiddleware,searchUsers);
-router.post("/users",authMiddleware,adminMiddleware,addUser)
-router.put("/users/:id",authMiddleware,adminMiddleware,updateUser);
-router.delete("/users/:id",authMiddleware,adminMiddleware,deleteUser);
+router.get("/dashboard",authMiddleware,adminMiddleware,getUsers);
+router.get("/dashboard/search",authMiddleware,adminMiddleware,searchUsers);
+router.post("/dashboard",authMiddleware,adminMiddleware,addUser)
+router.put("/dashboard/:id",authMiddleware,adminMiddleware,updateUser);
+router.delete("/dashboard/:id",authMiddleware,adminMiddleware,deleteUser);
 
 export default router;
