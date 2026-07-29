@@ -27,7 +27,11 @@ function Login() {
 
       dispatch(setCredentials({ user: response.user, token: response.token }));
 
-      navigate("/profile");
+      if (response.user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("profile");
+      }
     } catch (error) {
       setError(error.response?.data?.message || "Login failed");
     } finally {
