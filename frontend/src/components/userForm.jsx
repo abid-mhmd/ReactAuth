@@ -71,7 +71,6 @@ const UserForm = ({ mode, onSubmit, initialData }) => {
         )}
       </div>
 
-      {/* Password (Only while Adding User) */}
       {mode === "add" && (
         <div>
           <input

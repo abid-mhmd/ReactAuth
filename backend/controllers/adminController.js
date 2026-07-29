@@ -2,6 +2,8 @@ import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import generateToken from "../utils/generateToken.js";
 
+//admin Login
+
 export const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -47,15 +49,19 @@ export const adminLogin = async (req, res) => {
   }
 };
 
+//getUsers
+
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find().select("-password");
+    const users = await User.find({role:"user"}).select("-password");
 
     res.status(200).json({ success: true, users });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//serch users
 
 export const searchUsers = async (req, res) => {
   try {
@@ -73,6 +79,8 @@ export const searchUsers = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//add user
 
 export const addUser = async (req, res) => {
   try {
@@ -116,6 +124,8 @@ export const addUser = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+//update User
 
 export const updateUser = async (req, res) => {
   try {
@@ -161,6 +171,8 @@ export const updateUser = async (req, res) => {
   }
 };
 
+//deleteUser
+
 export const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -173,7 +185,6 @@ export const deleteUser = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    //Delete User
 
     await User.findByIdAndDelete(id);
 

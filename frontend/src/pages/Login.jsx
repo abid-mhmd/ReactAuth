@@ -39,17 +39,19 @@ function Login() {
     }
   };
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg"
+        className="w-full max-w-sm rounded-xl bg-white p-7 shadow-md"
       >
-        <h2 className="mb-6 text-center text-3xl font-bold">Login</h2>
+        <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">
+          Login
+        </h2>
 
         <input
           type="email"
           placeholder="Enter Email"
-          className="mb-1 w-full rounded border p-3"
+          className="mb-1 w-full rounded-lg border border-gray-300 px-4 py-2.5 outline-none transition focus:border-blue-500"
           {...register("email", {
             required: "Email is required",
           })}
@@ -62,7 +64,7 @@ function Login() {
         <input
           type="password"
           placeholder="Enter Password"
-          className="mb-1 w-full rounded border p-3"
+          className="mb-1 w-full rounded-lg border border-gray-300 px-4 py-2.5 outline-none transition focus:border-blue-500"
           {...register("password", {
             required: "Password is required",
           })}
@@ -72,19 +74,24 @@ function Login() {
           <p className="mb-3 text-sm text-red-500">{errors.password.message}</p>
         )}
 
-        {error && <p className="mb-4 text-center text-red-500">{error}</p>}
+        {error && (
+          <p className="mb-4 text-center text-sm text-red-500">{error}</p>
+        )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded bg-blue-600 p-3 text-white"
+          className="mt-2 w-full rounded-lg bg-blue-600 py-2.5 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {loading ? "Logging in..." : "Login"}
         </button>
 
-        <p className="mt-4 text-center">
+        <p className="mt-5 text-center text-sm text-gray-600">
           Don't have an account?{" "}
-          <Link to="/register" className="text-blue-600">
+          <Link
+            to="/register"
+            className="font-medium text-blue-600 hover:underline"
+          >
             Register
           </Link>
         </p>

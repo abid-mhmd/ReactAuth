@@ -40,49 +40,50 @@ function Register() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg"
+        className="w-full max-w-sm rounded-xl border border-gray-200 bg-white p-8 shadow-md"
       >
-        <h2 className="mb-6 text-center text-3xl font-bold">Register</h2>
+        <h2 className="mb-6 text-center text-2xl font-semibold text-gray-800">
+          Register
+        </h2>
 
-        {/* Name */}
 
         <input
           type="text"
           placeholder="Enter Name"
-          className="mb-1 w-full rounded border p-3"
+          className="mb-1 w-full rounded-lg border border-gray-200 px-4 py-2.5 outline-none transition focus:border-blue-500"
           {...register("name", {
             required: "Name is required",
           })}
         />
 
         {errors.name && (
-          <p className="mb-3 text-sm text-red-500">{errors.name.message}</p>
+          <p className="mb-3 ml-1 text-sm text-red-500">
+            {errors.name.message}
+          </p>
         )}
-
-        {/* Email */}
 
         <input
           type="email"
           placeholder="Enter Email"
-          className="mb-1 w-full rounded border p-3"
+          className="mb-1 w-full rounded-lg border border-gray-200 px-4 py-2.5 outline-none transition focus:border-blue-500"
           {...register("email", {
             required: "Email is required",
           })}
         />
 
         {errors.email && (
-          <p className="mb-3 text-sm text-red-500">{errors.email.message}</p>
+          <p className="mb-3 ml-1 text-sm text-red-500">
+            {errors.email.message}
+          </p>
         )}
-
-        {/* Password */}
 
         <input
           type="password"
           placeholder="Enter Password"
-          className="mb-1 w-full rounded border p-3"
+          className="mb-1 w-full rounded-lg border border-gray-200 px-4 py-2.5 outline-none transition focus:border-blue-500"
           {...register("password", {
             required: "Password is required",
             minLength: {
@@ -93,22 +94,24 @@ function Register() {
         />
 
         {errors.password && (
-          <p className="mb-3 text-sm text-red-500">{errors.password.message}</p>
+          <p className="mb-3 ml-1 text-sm text-red-500">
+            {errors.password.message}
+          </p>
         )}
 
-        {/* Backend Error */}
-
-        {error && <p className="mb-4 text-center text-red-500">{error}</p>}
+        {error && (
+          <p className="mb-4 text-center text-sm text-red-500">{error}</p>
+        )}
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded bg-blue-600 p-3 text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+          className="mt-2 w-full rounded-lg bg-blue-600 py-2.5 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
         >
           {loading ? "Registering..." : "Register"}
         </button>
 
-        <p className="mt-4 text-center">
+        <p className="mt-5 text-center text-sm text-gray-600">
           Already have an account?{" "}
           <Link to="/" className="font-medium text-blue-600 hover:underline">
             Login

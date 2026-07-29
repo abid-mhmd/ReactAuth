@@ -12,6 +12,8 @@ import {
 
 const router=express.Router();
 
+//routes
+
 router.post("/login",adminLogin);
 router.get("/dashboard",authMiddleware,adminMiddleware,getUsers);
 router.get("/dashboard/search",authMiddleware,adminMiddleware,searchUsers);

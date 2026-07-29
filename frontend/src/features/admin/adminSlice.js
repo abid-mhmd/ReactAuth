@@ -6,6 +6,8 @@ import {
   updateUser,
 } from "../../services/adminService";
 
+//fetchusers
+
 export const fetchUsers = createAsyncThunk(
   "admin/fetchUsers",
   async (token, thunkApi) => {
@@ -18,6 +20,8 @@ export const fetchUsers = createAsyncThunk(
     }
   },
 );
+
+//remove user
 
 export const removeUser = createAsyncThunk(
   "admin/delete",
@@ -34,6 +38,8 @@ export const removeUser = createAsyncThunk(
   },
 );
 
+//createuser
+
 export const createUser = createAsyncThunk(
   "admin/createUser",
   async ({ userData, token }, thunkApi) => {
@@ -46,6 +52,8 @@ export const createUser = createAsyncThunk(
     }
   },
 );
+
+//edituser
 
 export const editUser = createAsyncThunk(
   "admin/editUser",
@@ -65,6 +73,8 @@ const initialState = {
   loading: false,
   error: null,
 };
+
+//slice
 
 const adminSlice = createSlice({
   name: "admin",
