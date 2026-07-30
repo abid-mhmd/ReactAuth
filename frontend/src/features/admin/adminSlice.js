@@ -96,9 +96,9 @@ const adminSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(removeUser.fulfilled, (state, action) => {
-        return (state.users = state.users.filter(
+        state.users = state.users.filter(
           (user) => user._id !== action.payload,
-        ));
+        );
       })
       .addCase(createUser.fulfilled, (state, action) => {
         state.users.push(action.payload.user);
