@@ -2,8 +2,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { FaUserCircle, FaCamera } from "react-icons/fa";
 import { logout, updateUser } from "../../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
-import { updateProfile, uploadProfileImage } from "../../services/userServices";
-import { useState } from "react";
+import {
+  updateProfile,
+  uploadProfileImage,
+  getProfile,
+} from "../../services/userServices";
+import { useEffect, useState } from "react";
 
 function Profile() {
   const navigate = useNavigate();
@@ -17,6 +21,20 @@ function Profile() {
     name: user.name,
     email: user.email,
   });
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const data = await getProfile();
+
+        dispatch(updateUser(data.user));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    loadProfile();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -50,7 +68,7 @@ function Profile() {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   return (
