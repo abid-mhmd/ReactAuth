@@ -18,18 +18,22 @@ function Dashboard() {
   const navigate = useNavigate();
 
   const { token } = useSelector((state) => state.auth);
-  const { users, loading, error } = useSelector((state) => state.admin);
+  const { users, loading, error, currentPage, totalPages } = useSelector(
+    (state) => state.admin,
+  );
 
   const [search, setSearch] = useState("");
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState("add");
   const [selectedUser, setSelectedUser] = useState(null);
+  const [page, setPage] = useState(1);
+  const limit = 5;
 
   useEffect(() => {
     if (token) {
-      dispatch(fetchUsers(token));
+      dispatch(fetchUsers({ page, limit, token }));
     }
-  }, [dispatch, token]);
+  }, [dispatch, page, token]);
 
   const handleDelete = (id) => {
     const confirmDelete = window.confirm(
@@ -190,6 +194,27 @@ function Dashboard() {
               )}
             </tbody>
           </table>
+          <div className="mt-6 flex justify-center gap-1">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setPage(page - 1)}
+              className="rounded border px-2 py-1 text-xs disabled:opacity-40"
+            >
+              Prev
+            </button>
+
+            <span className="rounded border px-3 py-1 text-xs">
+              {currentPage}/{totalPages}
+            </span>
+
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setPage(page + 1)}
+              className="rounded border px-2 py-1 text-xs disabled:opacity-40"
+            >
+              Next
+            </button>
+          </div>
         </div>
 
         {show && (

@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import {
   getUsers,
   deleteUser,
@@ -10,9 +10,9 @@ import {
 
 export const fetchUsers = createAsyncThunk(
   "admin/fetchUsers",
-  async (token, thunkApi) => {
+  async ({ page, limit, token }, thunkApi) => {
     try {
-      return await getUsers(token);
+      return await getUsers(page,limit,token);
     } catch (error) {
       return thunkApi.rejectWithValue(
         error.response?.data?.message || "Failed to fetch users",
@@ -72,6 +72,9 @@ const initialState = {
   users: [],
   loading: false,
   error: null,
+  currentPage: 1,
+  totalPages: 1,
+  totalUsers: 0,
 };
 
 //slice
@@ -90,15 +93,16 @@ const adminSlice = createSlice({
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.loading = false;
         state.users = action.payload.users;
+        state.currentPage=action.payload.currentPage;
+        state.totalPages=action.payload.totalPages;
+        state.totalUsers=action.payload.totalUsers;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
       .addCase(removeUser.fulfilled, (state, action) => {
-        state.users = state.users.filter(
-          (user) => user._id !== action.payload,
-        );
+        state.users = state.users.filter((user) => user._id !== action.payload);
       })
       .addCase(createUser.fulfilled, (state, action) => {
         state.users.push(action.payload.user);

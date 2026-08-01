@@ -1,11 +1,14 @@
 import api from "./api";
 
-export const getUsers = async (token) => {
-  const responce = await api.get("/admin/dashboard", {
-    headers: {
-      Authorization: `Bearer ${token}`,
+export const getUsers = async (page, limit, token) => {
+  const responce = await api.get(
+    `/admin/dashboard?page=${page}&limit=${limit}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
   return responce.data;
 };
 
